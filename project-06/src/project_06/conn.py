@@ -1,5 +1,8 @@
 from pymongo import MongoClient
-from config import MONGO_URI, DB_NAME, SOURCE_COLLECTION, MONGO_UNAME, MONGO_PWD
+from google.cloud import storage
+from google.api_core import exceptions
+from config import MONGO_URI, DB_NAME, SOURCE_COLLECTION, GCS_BUCKET_NAME
+
 # MONGO_URI = "mongodb://localhost:27017/"
 # DB_NAME = "glamira"
 # SOURCE_COLLECTION = "summary19"
@@ -15,6 +18,16 @@ def get_mongo_client():
     except Exception as e:
         print(f"Error connecting to MongoDB: {e}")
         return
-    return source_col
+    return source_col, client
 
 # get_mongo_client()
+
+def get_gcs_client():
+    try:
+        storage_client = storage.Client()
+        bucket = storage_client.bucket(GCS_BUCKET_NAME)
+        print("Successfully authenticated with Google Cloud Storage.")
+    except exceptions.GoogleAPIError as e:
+        print(f"Error authenticating with GCS: {e}")
+        return
+    return bucket
