@@ -68,4 +68,6 @@ def load_gcs_to_bigquery(cloud_event):
         
     except Exception as e:
         logger.error(f"BigQuery Load Job Failed: {e}", exc_info=True)
-        raise
+        raise e
+
+    
