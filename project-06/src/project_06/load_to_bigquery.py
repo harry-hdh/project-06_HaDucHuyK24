@@ -67,7 +67,7 @@ def load_gcs_to_bigquery(cloud_event):
         logger.info(f"Successfully loaded data. Total rows now in table: {destination_table.num_rows}")
         
     except Exception as e:
-        logger.error(f"BigQuery Load Job Failed: {e}", exc_info=True)
+        logger.critical(f"Failed to load file {gcs_uri} to BigQuery: {e}", exc_info=True)
         raise e
 
     
