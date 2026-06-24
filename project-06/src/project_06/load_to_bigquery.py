@@ -1,4 +1,5 @@
 import logging
+import functions_framework
 from google.cloud import bigquery
 from google.cloud.exceptions import NotFound
 from table_schema import  TABLE_SCHEMA
@@ -7,11 +8,22 @@ from config import PROJECT_ID, DATASET_ID, TABLE_ID
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
-def load_gcs_to_bigquery(gcs_uri, file_format="JSONL"):
+@functions_framework.cloud_event
+def load_gcs_to_bigquery(cloud_event):
     """
     Loads data from a GCS URI into a BigQuery Raw Table.
-    gcs_uri example: 'gs://your-bucket-name/mongodb_exports/*.parquet'
+    gcs_uri example: 'gs://your-bucket-name/mongodb_exports/*.jsonl'
     """
+    data = cloud_event.data
+    bucket_name = data["bucket"]
+    file_name = data["name"]
+    gcs_uri = f"gs://{data['bucket']}/{data['name']}"
+
+    logger.info(f"New data file {gcs_uri}")
+    if not file_name.endswith('.jsonl'):
+        logger.info(f"Ignoring non-JSONL file: {file_name}")
+        return
+
     client = bigquery.Client(project=PROJECT_ID)
     dataset_ref = client.dataset(DATASET_ID)
     table_ref = dataset_ref.table(TABLE_ID)

@@ -32,7 +32,7 @@ def export_to_gcs():
 
         # Initialize GCS Client
         logger.info("Initializing GCS Client.")
-        bucket = True #get_gcs_client()
+        bucket = get_gcs_client()
 
         if not bucket:
              logger.error("Failed to initialize GCS Client. Exiting.")
@@ -103,14 +103,14 @@ def process_and_upload_batch(batch, batch_num, file_format, bucket, blob_prefix)
             raise ValueError(f"Unsupported file format: {file_format}")
 
         # UPLOAD TO GCS
-        #logger.info(f"Uploading batch #{batch_num} to GCS as gs://{bucket.name}/{blob_name}...")
-        #blob = bucket.blob(blob_name)
-        #blob.upload_from_filename(local_filename)
-        #logger.info(f"Batch #{batch_num} successfully uploaded.")
+        logger.info(f"Uploading batch #{batch_num} to GCS as gs://{bucket.name}/{blob_name}...")
+        blob = bucket.blob(blob_name)
+        blob.upload_from_filename(local_filename)
+        logger.info(f"Batch #{batch_num} successfully uploaded.")
 
     finally:
-        # Cleanup local file to keep VM disk space clean
-        #cleanup_local_file(local_filename)
+        Cleanup local file to keep VM disk space clean
+        cleanup_local_file(local_filename)
         logger.debug(f"Cleaned up local file: {local_filename}")
 
 
