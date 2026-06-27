@@ -17,7 +17,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 def export_to_gcs():
-    BATCH_SIZE = 10000  # Adjust based on your VM memory limits
+    BATCH_SIZE = 50000  # Adjust based on your VM memory limits
     FILE_FORMAT = "jsonl"  # Options: parquet, jsonl, csv
     GCS_BLOB_PREFIX = f"{DB_NAME}_{SOURCE_COLLECTION}"
 
@@ -92,6 +92,35 @@ def process_and_upload_batch(batch, batch_num, file_format, bucket, blob_prefix)
             f"Converting batch #{batch_num} ({len(batch)} records) to {file_format.upper()}..."
         )
         df = pd.DataFrame(batch)
+
+        if 'price' in df.columns:
+            # Force column to string type to perform safe replacements
+            df['price'] = df['price'].astype(str)
+
+            # Remove any spaces (including standard spaces and non-breaking spaces '\xa0')
+            df['price'] = df['price'].str.replace(r'[\s\xa0]+', '', regex=True)
+
+            # Replace the European decimal comma ',' with a standard dot '.'
+            df['price'] = df['price'].str.replace(',', '.', regex=False)
+
+            # Convert the cleaned string column to a true Float64 type
+            df['price'] = pd.to_numeric(df['price'], errors='coerce')
+
+            # Fill any empty/null prices with 0.0 or handle them based on business logic
+            df['price'] = df['price'].fillna(0.0)
+
+        # Clean recommendation_clicked_position
+        if 'recommendation_clicked_position' in df.columns:
+            df['recommendation_clicked_position'] = df['recommendation_clicked_position'].fillna(0)
+            df['recommendation_clicked_position'] = df['recommendation_clicked_position'].astype(int)
+
+        # 1. Select all text/object columns that could contain a broken string
+        string_cols = df.select_dtypes(include=['object']).columns
+        # 2. Strip out carriage returns and newline characters from string values
+        for col in string_cols:
+            # Ensure we only process column values that are actually strings
+            df[col] = df[col].astype(str).str.replace(r'[\r\n]+', ' ', regex=True).str.strip()
+
         print(df.head())
         if file_format == "parquet":
             df.to_parquet(local_filename, index=False)
@@ -109,7 +138,7 @@ def process_and_upload_batch(batch, batch_num, file_format, bucket, blob_prefix)
         logger.info(f"Batch #{batch_num} successfully uploaded.")
 
     finally:
-        Cleanup local file to keep VM disk space clean
+        #Cleanup local file to keep VM disk space clean
         cleanup_local_file(local_filename)
         logger.debug(f"Cleaned up local file: {local_filename}")
 

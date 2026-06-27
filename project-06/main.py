@@ -2,18 +2,19 @@ import logging
 import functions_framework
 from google.cloud import bigquery
 from google.cloud.exceptions import NotFound
-from table_schema import  TABLE_SCHEMA
-from config import PROJECT_ID, DATASET_ID, TABLE_ID
+from src.project_06.table_schema import  TABLE_SCHEMA
+from src.project_06.config import PROJECT_ID, DATASET_ID, TABLE_ID
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
 @functions_framework.cloud_event
-def load_gcs_to_bigquery(cloud_event):
+def load_gcs_to_bigquery_trigger(cloud_event, file_format='.jsonl'):
     """
     Loads data from a GCS URI into a BigQuery Raw Table.
     gcs_uri example: 'gs://your-bucket-name/mongodb_exports/*.jsonl'
     """
+    
     data = cloud_event.data
     bucket_name = data["bucket"]
     file_name = data["name"]
@@ -43,17 +44,19 @@ def load_gcs_to_bigquery(cloud_event):
     job_config = bigquery.LoadJobConfig()
     job_config.schema = TABLE_SCHEMA
     job_config.write_disposition = bigquery.WriteDisposition.WRITE_APPEND
+    job_config.autodetect = True
+    job_config.source_format = bigquery.SourceFormat.NEWLINE_DELIMITED_JSON
     
     # Handle formats dynamically
-    if file_format.upper() == "PARQUET":
-        job_config.source_format = bigquery.SourceFormat.PARQUET
-    elif file_format.upper() == "JSONL":
-        job_config.source_format = bigquery.SourceFormat.NEWLINE_DELIMITED_JSON
-    elif file_format.upper() == "CSV":
-        job_config.source_format = bigquery.SourceFormat.CSV
-        job_config.skip_leading_rows = 1 # Skip header row
-    else:
-        raise ValueError(f"Unsupported format: {file_format}")
+    # if file_format.upper() == "PARQUET":
+    #     job_config.source_format = bigquery.SourceFormat.PARQUET
+    # elif file_format.upper() == "JSONL":
+    #     job_config.source_format = bigquery.SourceFormat.NEWLINE_DELIMITED_JSON
+    # elif file_format.upper() == "CSV":
+    #     job_config.source_format = bigquery.SourceFormat.CSV
+    #     job_config.skip_leading_rows = 1 # Skip header row
+    # else:
+    #     raise ValueError(f"Unsupported format: {file_format}")
 
     # 3. Start BigQuery load job
     try:
