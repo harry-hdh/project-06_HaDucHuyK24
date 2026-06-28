@@ -9,7 +9,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(me
 logger = logging.getLogger(__name__)
 
 @functions_framework.cloud_event
-def load_gcs_to_bigquery_trigger(cloud_event, file_format='.jsonl'):
+def load_gcs_to_bigquery_trigger(cloud_event, file_format='jsonl'):
     """
     Loads data from a GCS URI into a BigQuery Raw Table.
     gcs_uri example: 'gs://your-bucket-name/mongodb_exports/*.jsonl'
