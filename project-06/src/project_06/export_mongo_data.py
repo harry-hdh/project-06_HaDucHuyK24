@@ -3,7 +3,7 @@ import sys
 from datetime import datetime
 import pandas as pd
 from pymongo.errors import PyMongoError
-from config import LOG_PATH, DB_NAME, SOURCE_COLLECTION
+from config import LOG_PATH, DB_NAME, SOURCE_COLLECTION, GCS_RAW_FOLDER_NAME
 from conn import get_mongo_client, get_gcs_client
 from utils import check_and_create_dir, cleanup_local_file
 
@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 def export_to_gcs():
     BATCH_SIZE = 50000  # Adjust based on your VM memory limits
     FILE_FORMAT = "jsonl"  # Options: parquet, jsonl, csv
-    GCS_BLOB_PREFIX = f"{DB_NAME}_{SOURCE_COLLECTION}"
+    GCS_BLOB_PREFIX = GCS_RAW_FOLDER_NAME
 
     try:
         logger.info("Connecting to MongoDB.")
@@ -81,7 +81,7 @@ def export_to_gcs():
 
 def process_and_upload_batch(batch, batch_num, file_format, bucket, blob_prefix):
     timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
-    local_filename = f"data/batch_{batch_num}_{timestamp}.{file_format}"
+    local_filename = f"mongo_data/batch_{batch_num}_{timestamp}.{file_format}"
     blob_name = f"{blob_prefix}/batch_{batch_num}_{timestamp}.{file_format}"
 
     

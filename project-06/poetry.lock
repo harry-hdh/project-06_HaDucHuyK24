@@ -1116,6 +1116,18 @@ files = [
 all = ["mypy (>=1.11.2)", "pytest (>=8.3.2)", "ruff (>=0.6.2)"]
 
 [[package]]
+name = "ip2location"
+version = "8.11.0"
+description = "This is an IP geolocation library that enables the user to find the country, region, city, latitude and longitude, ZIP code, time zone, ISP, domain name, area code, weather info, mobile info, elevation, usage type, address type and IAB category from an IP address. It supports both IPv4 and IPv6 lookup."
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "ip2location-8.11.0-py3-none-any.whl", hash = "sha256:cee21e91ccffbbc5486c588fac5ea5d210feb7e1754d17090e7c6ab358bab16a"},
+    {file = "ip2location-8.11.0.tar.gz", hash = "sha256:444149a741f6575d7711cf5414cfb81f0c44f830e2e94ab968d74665f8baaa31"},
+]
+
+[[package]]
 name = "itsdangerous"
 version = "2.2.0"
 description = "Safely pass data to untrusted environments and back."
@@ -1892,4 +1904,4 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.14,<4"
-content-hash = "9b6c9abe4ff1256035efd875eab7aa490faf19e6751e54fc5e91aa4e497c1073"
+content-hash = "230ace3927845e4bbd4622205f8a4acf6c734622d90065cb7acfcdaefcfc45cb"

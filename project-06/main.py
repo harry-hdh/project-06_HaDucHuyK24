@@ -72,5 +72,3 @@ def load_gcs_to_bigquery_trigger(cloud_event, file_format='jsonl'):
     except Exception as e:
         logger.critical(f"Failed to load file {gcs_uri} to BigQuery: {e}", exc_info=True)
         raise e
-
-    
