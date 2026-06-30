@@ -1,30 +1,31 @@
+import os
 import logging
 import functions_framework
 from google.cloud import bigquery
 from google.cloud.exceptions import NotFound
-from src.project_06.table_schema import  TABLE_SCHEMA
+from src.project_06.table_schema import  RAW_SCHEMA, IP_LOCATION_SCHEMA, PRODUCT_INFO_SCHEMA
 from src.project_06.config import PROJECT_ID, DATASET_ID, TABLE_ID
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
 @functions_framework.cloud_event
-def load_gcs_to_bigquery_trigger(cloud_event, file_format='jsonl'):
+def load_gcs_to_bigquery_trigger(cloud_event,):
     """
     Loads data from a GCS URI into a BigQuery Raw Table.
     gcs_uri example: 'gs://your-bucket-name/mongodb_exports/*.jsonl'
     """
-    
+    table_schema = os.environ.get("TABLE_SCHEMA").upper()
+    target_folder = os.environ.get("TARGET_FOLDER")
+
     data = cloud_event.data
     bucket_name = data["bucket"]
     file_name = data["name"]
-    gcs_uri = f"gs://{data['bucket']}/{data['name']}"
+    gcs_uri = f"gs://{bucket_name}/{target_folder}/{file_name}"
+    
 
     logger.info(f"New data file {gcs_uri}")
-    if not file_name.endswith('.jsonl'):
-        logger.info(f"Ignoring non-JSONL file: {file_name}")
-        return
-
+    
     client = bigquery.Client(project=PROJECT_ID)
     dataset_ref = client.dataset(DATASET_ID)
     table_ref = dataset_ref.table(TABLE_ID)
@@ -42,21 +43,21 @@ def load_gcs_to_bigquery_trigger(cloud_event, file_format='jsonl'):
 
     # 2. Configure the Load Job
     job_config = bigquery.LoadJobConfig()
-    job_config.schema = TABLE_SCHEMA
+    job_config.schema = table_schema
     job_config.write_disposition = bigquery.WriteDisposition.WRITE_APPEND
     job_config.autodetect = True
-    job_config.source_format = bigquery.SourceFormat.NEWLINE_DELIMITED_JSON
+    #job_config.source_format = bigquery.SourceFormat.NEWLINE_DELIMITED_JSON
     
     # Handle formats dynamically
-    # if file_format.upper() == "PARQUET":
-    #     job_config.source_format = bigquery.SourceFormat.PARQUET
-    # elif file_format.upper() == "JSONL":
-    #     job_config.source_format = bigquery.SourceFormat.NEWLINE_DELIMITED_JSON
-    # elif file_format.upper() == "CSV":
-    #     job_config.source_format = bigquery.SourceFormat.CSV
-    #     job_config.skip_leading_rows = 1 # Skip header row
-    # else:
-    #     raise ValueError(f"Unsupported format: {file_format}")
+    if file_name.upper().endswith("PARQUET"):
+        job_config.source_format = bigquery.SourceFormat.PARQUET
+    elif file_name.upper().endswith("JSONL"):
+        job_config.source_format = bigquery.SourceFormat.NEWLINE_DELIMITED_JSON
+    elif file_name.upper().endswith("CSV"):
+        job_config.source_format = bigquery.SourceFormat.CSV
+        job_config.skip_leading_rows = 1 # Skip header row
+    else:
+        raise ValueError(f"Unsupported format: {file_name}. Supported formats are PARQUET, JSONL, and CSV.")
 
     # 3. Start BigQuery load job
     try:

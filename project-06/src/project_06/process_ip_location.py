@@ -2,7 +2,7 @@ import logging
 import sys
 from conn import get_mongo_client, get_gcs_client
 from utils import check_and_create_dir, cleanup_local_file, save_to_csv, upload_file_to_gcs
-from config import LOG_PATH, DB_NAME, SOURCE_COLLECTION, IP2LOCATION_DB_PATH, GCS_BUCKET_NAME, LOCAL_OUTPUT_DATA_FOLDER, GCS_IP_LOCATION_FOLDER_NAME
+from config import LOG_PATH, GCS_IP_LOCATION_FOLDER_NAME
 import os
 import IP2Location
 
@@ -16,7 +16,6 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 def process_ip_loc(bin_path, local_output_csv_path):
-    BUCKET_PREFIX = GCS_IP_LOCATION_FOLDER_NAME
     # Verify that the IP2Location database file exists
     source_col, mongo_client = get_mongo_client()
     logger.info("Initializing GCS Client.")
@@ -78,10 +77,10 @@ def process_ip_loc(bin_path, local_output_csv_path):
     save_to_csv(results, keys, local_output_csv_path)
     logger.info(f"Successfully saved {len(results)} records to {local_output_csv_path}")
 
-    upload_file_to_gcs(local_output_csv_path, 'IP2Location', 'csv', bucket, BUCKET_PREFIX)
-    logger.info(f"Successfully uploaded {local_output_csv_path} to {bucket.name} - {BUCKET_PREFIX}")
+    upload_file_to_gcs(local_output_csv_path, 'IP2Location', 'csv', bucket, GCS_IP_LOCATION_FOLDER_NAME)
+    
 
 
 
        
-process_ip_loc(IP2LOCATION_DB_PATH, LOCAL_OUTPUT_DATA_FOLDER + "/ip2location_data.csv")
+#process_ip_loc(IP2LOCATION_DB_PATH, LOCAL_OUTPUT_DATA_FOLDER + "/ip2location_data.csv")

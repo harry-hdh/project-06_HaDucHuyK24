@@ -19,7 +19,6 @@ logger = logging.getLogger(__name__)
 def export_to_gcs():
     BATCH_SIZE = 50000  # Adjust based on your VM memory limits
     FILE_FORMAT = "jsonl"  # Options: parquet, jsonl, csv
-    GCS_BLOB_PREFIX = GCS_RAW_FOLDER_NAME
 
     try:
         logger.info("Connecting to MongoDB.")
@@ -144,5 +143,5 @@ def process_and_upload_batch(batch, batch_num, file_format, bucket, blob_prefix)
 
 
 
-if __name__ == "__main__":
-    export_to_gcs()
+# if __name__ == "__main__":
+#     export_to_gcs()

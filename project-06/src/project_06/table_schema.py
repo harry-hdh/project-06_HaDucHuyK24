@@ -84,3 +84,43 @@ RAW_SCHEMA = [
     ),
 ]
 
+
+IP_LOCATION_SCHEMA = [
+    bigquery.SchemaField("ip", "STRING", mode="REQUIRED"),
+    bigquery.SchemaField("country", "STRING", mode="NULLABLE"),
+    bigquery.SchemaField("region", "STRING", mode="NULLABLE"),
+    bigquery.SchemaField("city", "STRING", mode="NULLABLE")
+]
+
+
+PRODUCT_INFO_SCHEMA = [
+    bigquery.SchemaField("title", "STRING", mode="NULLABLE"),
+    bigquery.SchemaField("url", "STRING", mode="NULLABLE"),
+    bigquery.SchemaField("name", "STRING", mode="NULLABLE"),
+    bigquery.SchemaField("sku", "STRING", mode="NULLABLE"),
+    bigquery.SchemaField("attribute_set_id", "INTEGER", mode="NULLABLE"),
+    bigquery.SchemaField("attribute_set", "STRING", mode="NULLABLE"),
+    bigquery.SchemaField("type_id", "STRING", mode="NULLABLE"),
+    bigquery.SchemaField("price", "FLOAT", mode="NULLABLE"),
+    bigquery.SchemaField("min_price", "FLOAT", mode="NULLABLE"),
+    bigquery.SchemaField("max_price", "FLOAT", mode="NULLABLE"),
+    bigquery.SchemaField("min_price_format", "STRING", mode="NULLABLE"),
+    bigquery.SchemaField("max_price_format", "STRING", mode="NULLABLE"),
+    bigquery.SchemaField("gold_weight", "FLOAT", mode="NULLABLE"),
+    bigquery.SchemaField("none_metal_weight", "FLOAT", mode="NULLABLE"),
+    bigquery.SchemaField("fixed_silver_weight", "FLOAT", mode="NULLABLE"),
+    bigquery.SchemaField("material_design", "STRING", mode="NULLABLE"),
+    bigquery.SchemaField("qty", "INTEGER", mode="NULLABLE"),
+    bigquery.SchemaField("collection", "STRING", mode="NULLABLE"),
+    bigquery.SchemaField("collection_id", "INTEGER", mode="NULLABLE"),
+    bigquery.SchemaField("product_type", "STRING", mode="NULLABLE"),
+    bigquery.SchemaField("product_type_value", "STRING", mode="NULLABLE"),
+    bigquery.SchemaField("category", "INTEGER", mode="NULLABLE"),
+    bigquery.SchemaField("category_name", "STRING", mode="NULLABLE"),
+    bigquery.SchemaField("store_code", "STRING", mode="NULLABLE"),
+    bigquery.SchemaField("platinum_palladium_info_in_alloy", "FLOAT", mode="NULLABLE"),
+    bigquery.SchemaField("bracelet_without_chain", "STRING", mode="NULLABLE"),
+    bigquery.SchemaField("show_popup_quantity_eternity", "STRING", mode="NULLABLE"),
+    bigquery.SchemaField("visible_contents", "STRING", mode="NULLABLE"),
+    bigquery.SchemaField("gender", "STRING", mode="NULLABLE")
+]
