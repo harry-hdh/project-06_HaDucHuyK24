@@ -1,12 +1,8 @@
 from src.project6.conn import get_mongo_client
 from src.project6.utils import save_batch_csv, chunked
+from .logging import setup_logging
 
-
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    handlers=[logging.FileHandler(LOG_PATH), logging.StreamHandler(sys.stdout)],
-)
+logger = setup_logging()
 
 def extract_product_data(collection, target_events, fields_to_extract, folder_name, file_name, id_fallbacks=None):
 

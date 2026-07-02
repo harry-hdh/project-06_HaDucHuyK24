@@ -4,15 +4,9 @@ import re
 import json
 import csv
 from pathlib import Path
-from src.project6.config import LOG_PATH
+from .logging import setup_logging
 
-
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    handlers=[logging.FileHandler(LOG_PATH), logging.StreamHandler(sys.stdout)],
-)
-logger = logging.getLogger(__name__)
+logger = setup_logging()
 
 
 def chunked(lst, size):
@@ -22,6 +16,12 @@ def chunked(lst, size):
 def check_and_create_dir(file_path):
     parent_dir = os.path.dirname(file_path)
     Path(parent_dir).mkdir(parents=True, exist_ok=True)
+
+def check_and_create_file(file_path):
+    if not os.path.exists(file_path):
+        check_and_create_dir(file_path)
+        with open(file_path, 'w', encoding='utf-8') as f:
+            pass  # Just create the file
 
 #Cleanup local file
 def cleanup_local_file(file_path):

@@ -1,18 +1,12 @@
-import logging
-import sys
-from src.project6.conn import get_mongo_client, get_gcs_client
-from src.project6.utils import check_and_create_dir, cleanup_local_file, save_to_csv, upload_file_to_gcs
-from src.project6.config import LOG_PATH, GCS_IP_LOCATION_FOLDER_NAME
 import os
 import IP2Location
+import sys
+from .conn import get_mongo_client, get_gcs_client
+from .utils import check_and_create_dir, cleanup_local_file, save_to_csv, upload_file_to_gcs
+from .config import GCS_IP_LOCATION_FOLDER_NAME
+from .logging import setup_logging
 
-
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    handlers=[logging.FileHandler(LOG_PATH), logging.StreamHandler(sys.stdout)],
-)
-logger = logging.getLogger(__name__)
+logger = setup_logging()
 
 def process_ip_loc(bin_path, local_output_csv_path):
     # Verify that the IP2Location database file exists

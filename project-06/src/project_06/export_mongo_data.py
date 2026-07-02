@@ -1,18 +1,14 @@
-import logging
+
 import sys
 from datetime import datetime
 import pandas as pd
 from pymongo.errors import PyMongoError
-from config import LOG_PATH, DB_NAME, SOURCE_COLLECTION, GCS_GLAMIRA_RAW_FOLDER_NAME
+from config import DB_NAME, SOURCE_COLLECTION, GCS_GLAMIRA_RAW_FOLDER_NAME
 from src.project6.conn import get_mongo_client, get_gcs_client
 from src.project6.utils import check_and_create_dir, cleanup_local_file
+from .logging import setup_logging
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    handlers=[logging.FileHandler(LOG_PATH), logging.StreamHandler(sys.stdout)],
-)
-logger = logging.getLogger(__name__)
+logger = setup_logging()
 
 def export_to_gcs():
     BATCH_SIZE = 50000  # Adjust based on your VM memory limits

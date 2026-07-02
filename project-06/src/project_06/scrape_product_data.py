@@ -2,18 +2,14 @@ import asyncio
 import aiohttp
 from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
-from src.project6.utils import save_to_csv, read_product_csv, process_json_data, upload_file_to_gcs
-from src.project6.config import LOG_PATH, GCS_PRODUCT_INFO_FOLDER_NAME
-
+from .utils import save_to_csv, read_product_csv, process_json_data, upload_file_to_gcs
+from .config import GCS_PRODUCT_INFO_FOLDER_NAME
+from .conn import get_gcs_client
+from .logging import setup_logging
 
 #ua = UserAgent()
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    handlers=[logging.FileHandler(LOG_PATH), logging.StreamHandler(sys.stdout)],
-)
-logger = logging.getLogger(__name__)
+logger = setup_logging()
 
 async def fetch_and_parse(session, url, id, semaphore): # Controls how many requests
     async with semaphore:

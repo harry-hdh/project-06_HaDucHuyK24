@@ -9,7 +9,7 @@ from src.project_06.utils import read_product_csv, list_files_in_folder, check_a
 
 
 if __name__ == "__main__":
-    check_and_create_dir(LOG_PATH)  # Ensure log directory exists
+    
 
     # Process IP locations 
     process_ip_loc(IP2LOCATION_DB_PATH, LOCAL_OUTPUT_DATA_FOLDER + "/ip2location_data.csv")
