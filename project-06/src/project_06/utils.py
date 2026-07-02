@@ -6,7 +6,6 @@ import csv
 from pathlib import Path
 from config import LOG_PATH
 
-check_and_create_dir(LOG_PATH)  # Ensure log directory exists
 
 logging.basicConfig(
     level=logging.INFO,
@@ -149,3 +148,12 @@ def upload_file_to_gcs(local_folder, name, file_format, bucket, blob_prefix):
         # Cleanup local file to keep VM disk space clean
         cleanup_local_file(local_filename)
         logger.debug(f"Cleaned up local file: {local_filename}")
+
+# Get list of files in a folder
+def list_files_in_folder(folder_path):
+    try:
+        files = os.listdir(folder_path)
+        return files
+    except Exception as e:
+        print(f"Error listing files in {folder_path}: {e}")
+        return []

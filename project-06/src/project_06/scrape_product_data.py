@@ -7,7 +7,6 @@ from config import LOG_PATH, GCS_PRODUCT_INFO_FOLDER_NAME
 
 
 #ua = UserAgent()
-check_and_create_dir(LOG_PATH)  # Ensure log directory exists
 
 logging.basicConfig(
     level=logging.INFO,

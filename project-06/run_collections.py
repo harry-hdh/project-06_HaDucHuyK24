@@ -1,14 +1,16 @@
 import asyncio
-from src.project_06.config import IP2LOCATION_DB_PATH, IP_CSV_FILE_PATH, FOLDER_CURRENT_URLS, FOLDER_REFERRER_URLS, CRAWL_SAVE_PATH, FAIL_CRAWL_SAVE_PATH, LOCAL_OUTPUT_DATA_FOLDER
+from src.project_06.config import IP2LOCATION_DB_PATH, IP_CSV_FILE_PATH, FOLDER_CURRENT_URLS, FOLDER_REFERRER_URLS, CRAWL_SAVE_PATH, FAIL_CRAWL_SAVE_PATH, LOCAL_OUTPUT_DATA_FOLDER, LOG_PATH
 from src.project_06.collect_product_ids import extract_product_data
 from src.project_06.scrape_product_data import scrape_main
 from src.project_06.process_ip_loc import process_ip_loc
 from src.project_06.conn import get_mongo_client
-from src.project_06.utils import save_to_csv, read_product_csv, list_files_in_folder, remove_file_if_exists
+from src.project_06.utils import read_product_csv, list_files_in_folder, check_and_create_dir
 
 
 
 if __name__ == "__main__":
+    check_and_create_dir(LOG_PATH)  # Ensure log directory exists
+
     # Process IP locations 
     process_ip_loc(IP2LOCATION_DB_PATH, LOCAL_OUTPUT_DATA_FOLDER + "/ip2location_data.csv")
 

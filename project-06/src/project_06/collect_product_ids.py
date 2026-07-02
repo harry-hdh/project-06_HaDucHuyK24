@@ -1,7 +1,6 @@
 from conn import get_mongo_client
 from utils import save_batch_csv, chunked
 
-check_and_create_dir(LOG_PATH)  # Ensure log directory exists
 
 logging.basicConfig(
     level=logging.INFO,

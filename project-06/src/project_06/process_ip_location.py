@@ -6,7 +6,6 @@ from config import LOG_PATH, GCS_IP_LOCATION_FOLDER_NAME
 import os
 import IP2Location
 
-check_and_create_dir(LOG_PATH)  # Ensure log directory exists
 
 logging.basicConfig(
     level=logging.INFO,

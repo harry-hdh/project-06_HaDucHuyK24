@@ -7,8 +7,6 @@ from config import LOG_PATH, DB_NAME, SOURCE_COLLECTION, GCS_RAW_FOLDER_NAME
 from conn import get_mongo_client, get_gcs_client
 from utils import check_and_create_dir, cleanup_local_file
 
-check_and_create_dir(LOG_PATH)  # Ensure log directory exists
-
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
