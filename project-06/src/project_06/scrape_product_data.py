@@ -2,8 +2,8 @@ import asyncio
 import aiohttp
 from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
-from utils import save_to_csv, read_product_csv, process_json_data, upload_file_to_gcs
-from config import LOG_PATH, GCS_PRODUCT_INFO_FOLDER_NAME
+from src.project6.utils import save_to_csv, read_product_csv, process_json_data, upload_file_to_gcs
+from src.project6.config import LOG_PATH, GCS_PRODUCT_INFO_FOLDER_NAME
 
 
 #ua = UserAgent()

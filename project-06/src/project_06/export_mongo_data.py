@@ -3,9 +3,9 @@ import sys
 from datetime import datetime
 import pandas as pd
 from pymongo.errors import PyMongoError
-from config import LOG_PATH, DB_NAME, SOURCE_COLLECTION, GCS_RAW_FOLDER_NAME
-from conn import get_mongo_client, get_gcs_client
-from utils import check_and_create_dir, cleanup_local_file
+from config import LOG_PATH, DB_NAME, SOURCE_COLLECTION, GCS_GLAMIRA_RAW_FOLDER_NAME
+from src.project6.conn import get_mongo_client, get_gcs_client
+from src.project6.utils import check_and_create_dir, cleanup_local_file
 
 logging.basicConfig(
     level=logging.INFO,
@@ -53,7 +53,7 @@ def export_to_gcs():
                 batch_count += 1
                 total_records += len(batch)
                 process_and_upload_batch(
-                    batch, batch_count, FILE_FORMAT, bucket, GCS_BLOB_PREFIX
+                    batch, batch_count, FILE_FORMAT, bucket, GCS_GLAMIRA_RAW_FOLDER_NAME
                 )
                 batch = []
 
@@ -62,7 +62,7 @@ def export_to_gcs():
             batch_count += 1
             total_records += len(batch)
             process_and_upload_batch(
-                batch, batch_count, FILE_FORMAT, bucket, GCS_BLOB_PREFIX
+                batch, batch_count, FILE_FORMAT, bucket, GCS_GLAMIRA_RAW_FOLDER_NAME
             )
         logger.info(f"Extraction completed. Total records exported: {total_records}")
     

@@ -1,8 +1,8 @@
 import logging
 import sys
-from conn import get_mongo_client, get_gcs_client
-from utils import check_and_create_dir, cleanup_local_file, save_to_csv, upload_file_to_gcs
-from config import LOG_PATH, GCS_IP_LOCATION_FOLDER_NAME
+from src.project6.conn import get_mongo_client, get_gcs_client
+from src.project6.utils import check_and_create_dir, cleanup_local_file, save_to_csv, upload_file_to_gcs
+from src.project6.config import LOG_PATH, GCS_IP_LOCATION_FOLDER_NAME
 import os
 import IP2Location
 

@@ -1,5 +1,5 @@
 import asyncio
-from src.project_06.config import IP2LOCATION_DB_PATH, IP_CSV_FILE_PATH, FOLDER_CURRENT_URLS, FOLDER_REFERRER_URLS, CRAWL_SAVE_PATH, FAIL_CRAWL_SAVE_PATH, LOCAL_OUTPUT_DATA_FOLDER, LOG_PATH
+from src.project_06.config import IP2LOCATION_DB_PATH, FOLDER_CURRENT_URLS, FOLDER_REFERRER_URLS, CRAWL_SAVE_PATH, FAIL_CRAWL_SAVE_PATH, LOCAL_OUTPUT_DATA_FOLDER, LOG_PATH
 from src.project_06.collect_product_ids import extract_product_data
 from src.project_06.scrape_product_data import scrape_main
 from src.project_06.process_ip_loc import process_ip_loc

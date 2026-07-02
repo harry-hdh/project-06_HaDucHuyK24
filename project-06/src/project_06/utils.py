@@ -4,7 +4,7 @@ import re
 import json
 import csv
 from pathlib import Path
-from config import LOG_PATH
+from src.project6.config import LOG_PATH
 
 
 logging.basicConfig(

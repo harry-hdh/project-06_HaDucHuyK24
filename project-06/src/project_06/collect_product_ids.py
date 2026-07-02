@@ -1,5 +1,5 @@
-from conn import get_mongo_client
-from utils import save_batch_csv, chunked
+from src.project6.conn import get_mongo_client
+from src.project6.utils import save_batch_csv, chunked
 
 
 logging.basicConfig(
