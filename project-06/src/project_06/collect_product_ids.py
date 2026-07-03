@@ -1,5 +1,5 @@
-from src.project6.conn import get_mongo_client
-from src.project6.utils import save_batch_csv, chunked
+from .conn import get_mongo_client
+from .utils import save_batch_csv, chunked
 from .logging import setup_logging
 
 logger = setup_logging()
@@ -63,7 +63,7 @@ def extract_product_data(collection, target_events, fields_to_extract, folder_na
         for i, batch in enumerate(chunked(extracted_records, 1000), 1):  
             save_batch_csv(batch, fieldnames, file_name, i, folder_name)
     else:
-        logging.info("No matching event data found based on your criteria.")
+        logger.info("No matching event data found based on your criteria.")
 
 
 # collections = [

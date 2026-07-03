@@ -17,11 +17,11 @@ def check_and_create_dir(file_path):
     parent_dir = os.path.dirname(file_path)
     Path(parent_dir).mkdir(parents=True, exist_ok=True)
 
-def check_and_create_file(file_path):
-    if not os.path.exists(file_path):
-        check_and_create_dir(file_path)
-        with open(file_path, 'w', encoding='utf-8') as f:
-            pass  # Just create the file
+# def check_and_create_file(file_path):
+#     if not os.path.exists(file_path):
+#         check_and_create_dir(file_path)
+#         with open(file_path, 'w', encoding='utf-8') as f:
+#             pass  # Just create the file
 
 #Cleanup local file
 def cleanup_local_file(file_path):
@@ -129,11 +129,9 @@ def process_json_data(soup, url):
 
 
 #upload to GCS
-def upload_file_to_gcs(local_folder, name, file_format, bucket, blob_prefix):
-    local_filename = f"{local_folder}/{name}.{file_format}"
+def upload_file_to_gcs(local_file_path, name, file_format, bucket, blob_prefix):
     blob_name = f"{blob_prefix}/{name}.{file_format}"
 
-    check_and_create_dir(local_filename)
     try:
         logger.info(
             f"Converting file {name} ({len(result)} records) to {file_format.upper()}."
@@ -142,12 +140,12 @@ def upload_file_to_gcs(local_folder, name, file_format, bucket, blob_prefix):
         # UPLOAD TO GCS
         logger.info(f"Uploading file {name}.{file_format} to GCS as gs://{bucket.name}/{blob_name}...")
         blob = bucket.blob(blob_name)
-        blob.upload_from_filename(local_filename)
+        blob.upload_from_filename(local_file_path)
         logger.info(f"File {name}.{file_format} successfully uploaded.")
     finally:
         # Cleanup local file to keep VM disk space clean
-        cleanup_local_file(local_filename)
-        logger.debug(f"Cleaned up local file: {local_filename}")
+        cleanup_local_file(local_file_path)
+        logger.debug(f"Cleaned up local file: {local_file_path}")
 
 # Get list of files in a folder
 def list_files_in_folder(folder_path):

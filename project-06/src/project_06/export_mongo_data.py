@@ -4,8 +4,8 @@ from datetime import datetime
 import pandas as pd
 from pymongo.errors import PyMongoError
 from config import DB_NAME, SOURCE_COLLECTION, GCS_GLAMIRA_RAW_FOLDER_NAME
-from src.project6.conn import get_mongo_client, get_gcs_client
-from src.project6.utils import check_and_create_dir, cleanup_local_file
+from .conn import get_mongo_client, get_gcs_client
+from .utils import check_and_create_dir, cleanup_local_file
 from .logging import setup_logging
 
 logger = setup_logging()
