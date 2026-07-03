@@ -97,6 +97,9 @@ def process_json_data(soup, url):
                 "product_id": product_id,
                 "name": product_info.get('name', 'NULL'),
                 "sku": product_info.get('sku', 'NULL'),
+                "attribute_set_id": product_info.get('attribute_set_id', 'NULL'),
+                "attribute_set": product_info.get('attribute_set', 'NULL'),
+                "type_id": product_info.get('type_id', 'NULL'),
                 "price": product_info.get('price', 'NULL'),
                 "min_price": product_info.get('min_price', 'NULL'),
                 "max_price": product_info.get('max_price', 'NULL'),
@@ -133,10 +136,6 @@ def upload_file_to_gcs(local_file_path, name, file_format, bucket, blob_prefix):
     blob_name = f"{blob_prefix}/{name}.{file_format}"
 
     try:
-        logger.info(
-            f"Converting file {name} ({len(result)} records) to {file_format.upper()}."
-        )
-
         # UPLOAD TO GCS
         logger.info(f"Uploading file {name}.{file_format} to GCS as gs://{bucket.name}/{blob_name}...")
         blob = bucket.blob(blob_name)

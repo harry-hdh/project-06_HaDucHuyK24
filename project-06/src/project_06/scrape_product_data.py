@@ -75,7 +75,7 @@ async def scrape_main(successful_save_path, err_save_path, urls, mode='w'):
         # 5. Save successful results to CSV
         successful_results = [result for result in results if result["title"] not in ["Failed to Fetch", "Failed to Fetch with Fallback", "Error Occurred"]]
         if successful_results:
-            save_to_csv(successful_results, ["title", "url", "name", "sku", "attribute_set_id", "attribute_set", "type_id", "price", "min_price", "max_price", "min_price_format", "max_price_format", "gold_weight", "none_metal_weight", "fixed_silver_weight", "material_design", "qty", "collection", "collection_id", "product_type", "product_type_value", "category", "category_name", "store_code", "platinum_palladium_info_in_alloy", "bracelet_without_chain", "show_popup_quantity_eternity", "visible_contents", "gender"], successful_save_path, mode=mode)
+            save_to_csv(successful_results, ["title", "url", "product_id", "name", "sku", "attribute_set_id", "attribute_set", "type_id", "price", "min_price", "max_price", "min_price_format", "max_price_format", "gold_weight", "none_metal_weight", "fixed_silver_weight", "material_design", "qty", "collection", "collection_id", "product_type", "product_type_value", "category", "category_name", "store_code", "platinum_palladium_info_in_alloy", "bracelet_without_chain", "show_popup_quantity_eternity", "visible_contents", "gender"], successful_save_path, mode=mode)
     bucket = get_gcs_client()
     if not bucket:
         logger.error("Failed to initialize GCS Client. Exiting.")

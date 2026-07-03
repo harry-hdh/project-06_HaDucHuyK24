@@ -52,7 +52,8 @@ def extract_product_data(collection, target_events, fields_to_extract, folder_na
         pipeline.append({"$project": final_project_stage})
 
     #Running aggregation query on MongoDB
-    cursor = collection.aggregate(pipeline)
+    source_col, mongo_client = collection
+    cursor = source_col.aggregate(pipeline)
     # Convert cursor to a list of dicts to write to CSV
     extracted_records = list(cursor)
 
