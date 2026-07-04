@@ -34,34 +34,34 @@ def save_batch_csv(data, headers, file_name, batch_num, folder_name):
     cleanup_local_file(file_path)
     logger.info(f"Existing file in {file_path} removed.")
     check_and_create_dir(file_path)
-    print(f"Folder in {file_path} created.")
+    logger.info(f"Folder in {file_path} created.")
     
     with open(file_path, 'w', newline='', encoding='utf-8') as output_file:
         dict_writer = csv.DictWriter(output_file, fieldnames=headers)
         dict_writer.writeheader()
         dict_writer.writerows(data)
-    print(f"Successfully saved {len(data)} records to {file_path}")
+    logger.info(f"Successfully saved {len(data)} records to {file_path}")
 
 
 def save_to_csv(data, headers, file_path, mode='w'):
     if mode == 'w':
         cleanup_local_file(file_path)
-        print(f"Existing file in {file_path} removed.")
+        logger.info(f"Existing file in {file_path} removed.")
         check_and_create_dir(file_path)
-        print(f"Folder in {file_path} created.")
+        logger.info(f"Folder in {file_path} created.")
 
         with open(file_path, 'w', newline='', encoding='utf-8') as output_file:
             dict_writer = csv.DictWriter(output_file, fieldnames=headers)
             dict_writer.writeheader()
             dict_writer.writerows(data)
-        print(f"Successfully saved {len(data)} records to {file_path}")
+        logger.info(f"Successfully saved {len(data)} records to {file_path}")
     elif mode == 'a':
         with open(file_path, 'a', newline='', encoding='utf-8') as output_file:
             dict_writer = csv.DictWriter(output_file, fieldnames=headers)
             dict_writer.writerows(data)
-        print(f"Successfully appended {len(data)} records to {file_path}")
+        logger.info(f"Successfully appended {len(data)} records to {file_path}")
     else:
-        print(f"Invalid mode '{mode}' specified. Use 'w' for write or 'a' for append.")
+        logger.error(f"Invalid mode '{mode}' specified. Use 'w' for write or 'a' for append.")
 
 
 # read csv file and remove duplicates based on product_id, remevoe missing referrer_url, and return a list of referrer_url
@@ -124,10 +124,10 @@ def process_json_data(soup, url):
                 "gender": product_info.get('gender', 'NULL')
             }
         except Exception as e:
-            print(f"Error parsing JSON for {url}: {e}")
+            logger.error(f"Error parsing JSON for {url}: {e}")
             return {"title": "Failed to Parse JSON", "url": url, "product_info": {}}
     else:
-        print(f"No react_data script tag found for {url}")
+        logger.error(f"No react_data script tag found for {url}")
         return {"title": "No react_data Found", "url": url, "product_info": {}}
 
 
@@ -152,5 +152,5 @@ def list_files_in_folder(folder_path):
         files = os.listdir(folder_path)
         return files
     except Exception as e:
-        print(f"Error listing files in {folder_path}: {e}")
+        logger.error(f"Error listing files in {folder_path}: {e}")
         return []
