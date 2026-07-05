@@ -51,13 +51,13 @@ def save_to_csv(data, headers, file_path, mode='w'):
         logger.info(f"Folder in {file_path} created.")
 
         with open(file_path, 'w', newline='', encoding='utf-8') as output_file:
-            dict_writer = csv.DictWriter(output_file, fieldnames=headers)
+            dict_writer = csv.DictWriter(output_file, fieldnames=headers, extrasaction='ignore')
             dict_writer.writeheader()
             dict_writer.writerows(data)
         logger.info(f"Successfully saved {len(data)} records to {file_path}")
     elif mode == 'a':
         with open(file_path, 'a', newline='', encoding='utf-8') as output_file:
-            dict_writer = csv.DictWriter(output_file, fieldnames=headers)
+            dict_writer = csv.DictWriter(output_file, fieldnames=headers, extrasaction='ignore')
             dict_writer.writerows(data)
         logger.info(f"Successfully appended {len(data)} records to {file_path}")
     else:
@@ -78,7 +78,7 @@ def read_product_csv(file_path, url_field, id_field="product_id"):
     return [{"product_id": pid, url_field: url} for pid, url in unique_records.items()]
 
 # Process json data
-#SAMPLE DATA json_data = {"product_id":110644,"name":"F\u00f6rlovningsring Titina 0.5 crt","sku":"titina05","attribute_set_id":55,"attribute_set":"diamonds","type_id":"simple","price":"7749.000000","min_price":"2098.000000","max_price":"461205.000000","min_price_format":"2\u00a0098,00\u00a0Kr","max_price_format":"461\u00a0205,00\u00a0Kr","gold_weight":"1.2051","none_metal_weight":0,"fixed_silver_weight":0,"material_design":null,"qty":1,"collection":"classic_solitaire","collection_id":"5171","product_type":"ring","product_type_value":"1","category":"605","category_name":"F\u00f6rlovningsringar","store_code":"glse","platinum_palladium_info_in_alloy":0,"bracelet_without_chain":0,"show_popup_quantity_eternity":0,"visible_contents":[""],"gender":"women"}
+#SAMPLE DATA json_data = {'title': 'Sužadėtuvių žiedas Primula 1.25 crt', 'url': 'https://www.glamira.lt/glamira-ring-primula-1.25-crt.html?itm_source=recommendation&itm_medium=sorting&fbclid=IwAR06BpNDzLB4eqFWR02Eozk0X8J23zY9AUXoeUZTgYOPOSZwcFw_LkKTeeY', 'product_id': 110641, 'name': 'Sužadėtuvių žiedas Primula 1.25 crt', 'sku': 'primula125', 'attribute_set_id': 55, 'attribute_set': 'diamonds', 'type_id': 'simple', 'price': '955.000000', 'min_price': '176.000000', 'max_price': '112171.000000', 'min_price_format': '176,00\xa0€', 'max_price_format': '112\xa0171,00\xa0€', 'gold_weight': '1.7511', 'none_metal_weight': 0, 'fixed_silver_weight': 0, 'material_design': None, 'qty': 1, 'collection': 'design_solitaire', 'collection_id': '5170', 'product_type': 'ring', 'product_type_value': '1', 'category': '605', 'category_name': 'Sužadėtuvių žiedai', 'store_code': 'gllt', 'platinum_palladium_info_in_alloy': 0, 'bracelet_without_chain': 0, 'show_popup_quantity_eternity': 0, 'visible_contents': [''], 'gender': 'women'}, {'title': 'Mannens giftering White Crown 4 mm', 'url': 'https://www.glamira.no/herrering-white-crown-4-mm.html?alloy=white-silber&itm_source=recommendation&itm_medium=sorting', 'product_id': 105956, 'name': 'Mannens giftering White Crown 4 mm', 'sku': 'GWD-N1112-4-M', 'attribute_set_id': 26, 'attribute_set': 'trauring', 'type_id': 'simple', 'price': '6656.000000', 'min_price': '1324.000000', 'max_price': '66842.000000', 'min_price_format': 'kr\xa01\xa0324,00', 'max_price_format': 'kr\xa066\xa0842,00', 'gold_weight': '1.3689', 'none_metal_weight': 0, 'fixed_silver_weight': 0, 'material_design': None, 'qty': 1, 'collection': 'simple', 'collection_id': '164', 'product_type': 'wedding_ring', 'product_type_value': '12', 'category': '690', 'category_name': 'Herreringer', 'store_code': 'glno', 'platinum_palladium_info_in_alloy': 0, 'bracelet_without_chain': 0, 'show_popup_quantity_eternity': 0, 'visible_contents': [''], 'gender': 'men'},
 def process_json_data(soup, url):
     script_tag = soup.find('script', string=re.compile(r'react_data'))
     if script_tag:

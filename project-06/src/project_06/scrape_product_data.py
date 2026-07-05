@@ -69,11 +69,11 @@ async def scrape_main(successful_save_path, err_save_path, urls, mode='w'):
         # 4. Gather results
         results = await asyncio.gather(*tasks)
         # Check if results is error or failed to fetch and save to failed_urls.csv
-        failed_results = [result for result in results if result["title"] in ["Failed to Fetch", "Failed to Fetch with Fallback", "Error Occurred"]]
+        failed_results = [result for result in results if result["title"] in ["Failed to Fetch", "Failed to Fetch with Fallback", "Error Occurred", "No react_data Found", "Failed to Parse JSON"]]
         if failed_results:
             save_to_csv(failed_results, ["title", "url", "product_info"], err_save_path, mode=mode)
         # 5. Save successful results to CSV
-        successful_results = [result for result in results if result["title"] not in ["Failed to Fetch", "Failed to Fetch with Fallback", "Error Occurred"]]
+        successful_results = [result for result in results if result["title"] not in ["Failed to Fetch", "Failed to Fetch with Fallback", "Error Occurred", "No react_data Found", "Failed to Parse JSON"]]
         if successful_results:
             save_to_csv(successful_results, ["title", "url", "product_id", "name", "sku", "attribute_set_id", "attribute_set", "type_id", "price", "min_price", "max_price", "min_price_format", "max_price_format", "gold_weight", "none_metal_weight", "fixed_silver_weight", "material_design", "qty", "collection", "collection_id", "product_type", "product_type_value", "category", "category_name", "store_code", "platinum_palladium_info_in_alloy", "bracelet_without_chain", "show_popup_quantity_eternity", "visible_contents", "gender"], successful_save_path, mode=mode)
     bucket = get_gcs_client()

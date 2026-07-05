@@ -4,7 +4,7 @@ import functions_framework
 from google.cloud import bigquery
 from google.cloud.exceptions import NotFound
 from src.project_06.table_schema import  RAW_SCHEMA, IP_LOCATION_SCHEMA, PRODUCT_INFO_SCHEMA
-from src.project_06.config import PROJECT_ID, DATASET_ID, TABLE_ID
+from src.project_06.config import PROJECT_ID, DATASET_ID, RAW_TABLE_ID, IP_TABLE_ID, PRODUCT_INFO_TABLE_ID
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -17,6 +17,7 @@ def load_gcs_to_bigquery_trigger(cloud_event,):
     """
     table_schema = os.environ.get("TABLE_SCHEMA").upper()
     target_folder = os.environ.get("TARGET_FOLDER")
+    table_id = os.environ.get("TARGET_TABLE_ID")
 
     data = cloud_event.data
     bucket_name = data["bucket"]
@@ -28,7 +29,7 @@ def load_gcs_to_bigquery_trigger(cloud_event,):
     
     client = bigquery.Client(project=PROJECT_ID)
     dataset_ref = client.dataset(DATASET_ID)
-    table_ref = dataset_ref.table(TABLE_ID)
+    table_ref = dataset_ref.table(table_id)
 
     # 1. Ensure Dataset Exists
     try:

@@ -3,10 +3,12 @@ from src.project_06.config import IP2LOCATION_DB_PATH, FOLDER_CURRENT_URLS, FOLD
 from src.project_06.collect_product_ids import extract_product_data
 from src.project_06.scrape_product_data import scrape_main
 from src.project_06.process_ip_location import process_ip_loc
+from src.project_06.export_mongo_data import export_to_gcs
+import logging
 from src.project_06.conn import get_mongo_client
 from src.project_06.utils import read_product_csv, list_files_in_folder, check_and_create_dir
 
-
+logger = setup_logging()
 
 if __name__ == "__main__":
     
@@ -39,15 +41,16 @@ if __name__ == "__main__":
     
 
     for file in current_url_files:
-        print(f"Processing file: {file}")
+        logger.info(f"Processing file: {file}")
         URLS_IDS1 = [(record["current_url"], record["product_id"]) for record in read_product_csv(f"{FOLDER_CURRENT_URLS}/{file}", url_field="current_url")] 
         asyncio.run(scrape_main(successful_save_path=CRAWL_SAVE_PATH, err_save_path=FAIL_CRAWL_SAVE_PATH, urls=URLS_IDS1, mode='a'))  # Write results from first set of URLs to CSV
 
     for file in referrer_url_files:
-        print(f"Processing file: {file}")
+        logger.info(f"Processing file: {file}")
         URLS_IDS2 = [(record["referrer_url"], record["product_id"]) for record in read_product_csv(f"{FOLDER_REFERRER_URLS}/{file}", url_field="referrer_url")]
         #print(URLS_IDS2[:5])
         asyncio.run(scrape_main(successful_save_path=CRAWL_SAVE_PATH, err_save_path=FAIL_CRAWL_SAVE_PATH, urls=URLS_IDS2, mode='a'))  # Append results from second set of URLs to the same CSV
 
+    logger.info('Starting export mongodb data to GCS...')
     export_to_gcs()
     
