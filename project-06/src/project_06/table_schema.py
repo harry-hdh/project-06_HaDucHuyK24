@@ -96,6 +96,7 @@ IP_LOCATION_SCHEMA = [
 PRODUCT_INFO_SCHEMA = [
     bigquery.SchemaField("title", "STRING", mode="NULLABLE"),
     bigquery.SchemaField("url", "STRING", mode="NULLABLE"),
+    bigquery.SchemaField("product_id", "STRING", mode="NULLABLE"),
     bigquery.SchemaField("name", "STRING", mode="NULLABLE"),
     bigquery.SchemaField("sku", "STRING", mode="NULLABLE"),
     bigquery.SchemaField("attribute_set_id", "INTEGER", mode="NULLABLE"),
