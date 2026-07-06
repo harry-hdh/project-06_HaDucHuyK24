@@ -54,8 +54,8 @@ RAW_SCHEMA = [
     bigquery.SchemaField("referrer_url", "STRING", mode="NULLABLE"),
     bigquery.SchemaField("email_address", "STRING", mode="NULLABLE"),
     bigquery.SchemaField("recommendation", "BOOLEAN", mode="NULLABLE"),
-    bigquery.SchemaField("utm_source", "BOOLEAN", mode="NULLABLE"),
-    bigquery.SchemaField("utm_medium", "BOOLEAN", mode="NULLABLE"),
+    bigquery.SchemaField("utm_source", "STRING", mode="NULLABLE"),
+    bigquery.SchemaField("utm_medium", "STRING", mode="NULLABLE"),
     bigquery.SchemaField("collection", "STRING", mode="NULLABLE"),
     bigquery.SchemaField("product_id", "STRING", mode="NULLABLE"),
     # Nullable context fields
