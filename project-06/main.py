@@ -4,7 +4,7 @@ import functions_framework
 from google.cloud import bigquery
 from google.cloud.exceptions import NotFound
 from src.project_06.table_schema import  RAW_SCHEMA, IP_LOCATION_SCHEMA, PRODUCT_INFO_SCHEMA
-from src.project_06.config import PROJECT_ID, DATASET_ID, RAW_TABLE_ID, IP_TABLE_ID, PRODUCT_INFO_TABLE_ID
+from src.project_06.config import PROJECT_ID, DATASET_ID, RAW_TABLE_ID, IP_TABLE_ID, PRODUCT_INFO_TABLE_ID, GCS_IP_LOCATION_FOLDER_NAME, GCS_PRODUCT_INFO_FOLDER_NAME, GCS_GLAMIRA_RAW_FOLDER_NAME
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -15,20 +15,31 @@ def load_gcs_to_bigquery_trigger(cloud_event,):
     Loads data from a GCS URI into a BigQuery Raw Table.
     gcs_uri example: 'gs://your-bucket-name/mongodb_exports/*.jsonl'
     """
-    table_schema = os.environ.get("TABLE_SCHEMA").upper()
-    target_folder = os.environ.get("TARGET_FOLDER")
-    table_id = os.environ.get("TARGET_TABLE_ID")
+    # target_table_schema = os.environ.get("TARGET_TABLE_SCHEMA").upper()
+    # target_folder = os.environ.get("TARGET_FOLDER")
+    #table_id = os.environ.get("TARGET_TABLE_ID")
 
     data = cloud_event.data
     bucket_name = data["bucket"]
     file_name = data["name"]
-    gcs_uri = f"gs://{bucket_name}/{target_folder}/{file_name}"
+    gcs_uri = f"gs://{bucket_name}/{file_name}"
     
+    if file_name.startswith(GCS_GLAMIRA_RAW_FOLDER_NAME+"/"):
+        target_table_schema = "RAW"
+        table_id = RAW_TABLE_ID
+    elif file_name.startswith(GCS_IP_LOCATION_FOLDER_NAME+"/"):
+        target_table_schema = "IP_LOCATION"
+        table_id = IP_TABLE_ID
+    elif file_name.startswith(GCS_PRODUCT_INFO_FOLDER_NAME+"/"):
+        target_table_schema = "PRODUCT_INFO"
+        table_id = PRODUCT_INFO_TABLE_ID
+    else:
+        logger.error(f"Unrecognized file path: {file_name}. Cannot determine target table schema.")
+        return
 
     logger.info(f"New data file {gcs_uri}")
-    
     client = bigquery.Client(project=PROJECT_ID)
-    dataset_ref = client.dataset(DATASET_ID)
+    dataset_ref = client.dataset(DATASET_ID)  
     table_ref = dataset_ref.table(table_id)
 
     # 1. Ensure Dataset Exists
@@ -44,7 +55,15 @@ def load_gcs_to_bigquery_trigger(cloud_event,):
 
     # 2. Configure the Load Job
     job_config = bigquery.LoadJobConfig()
-    job_config.schema = table_schema
+    if target_table_schema == "RAW":
+        job_config.schema = RAW_SCHEMA
+    elif target_table_schema == "IP_LOCATION":
+        job_config.schema = IP_LOCATION_SCHEMA
+    elif target_table_schema == "PRODUCT_INFO":
+        job_config.schema = PRODUCT_INFO_SCHEMA
+    else:
+        raise ValueError(f"Unsupported table schema: {target_table_schema}")
+        
     job_config.write_disposition = bigquery.WriteDisposition.WRITE_APPEND
     job_config.autodetect = True
     #job_config.source_format = bigquery.SourceFormat.NEWLINE_DELIMITED_JSON
