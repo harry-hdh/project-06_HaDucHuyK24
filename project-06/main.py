@@ -65,8 +65,9 @@ def load_gcs_to_bigquery_trigger(cloud_event,):
         raise ValueError(f"Unsupported table schema: {target_table_schema}")
         
     job_config.write_disposition = bigquery.WriteDisposition.WRITE_APPEND
-    job_config.autodetect = True
+    job_config.autodetect = False  # Disable autodetect since we are providing a schema
     #job_config.source_format = bigquery.SourceFormat.NEWLINE_DELIMITED_JSON
+    job_config.ignore_unknown_values = True
     
     # Handle formats dynamically
     if file_name.upper().endswith("PARQUET"):

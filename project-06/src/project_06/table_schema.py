@@ -54,8 +54,8 @@ RAW_SCHEMA = [
     bigquery.SchemaField("referrer_url", "STRING", mode="NULLABLE"),
     bigquery.SchemaField("email_address", "STRING", mode="NULLABLE"),
     bigquery.SchemaField("recommendation", "BOOLEAN", mode="NULLABLE"),
-    bigquery.SchemaField("utm_source", "STRING", mode="NULLABLE"),
-    bigquery.SchemaField("utm_medium", "STRING", mode="NULLABLE"),
+    bigquery.SchemaField("utm_source", "BOOLEAN", mode="NULLABLE"),
+    bigquery.SchemaField("utm_medium", "BOOLEAN", mode="NULLABLE"),
     bigquery.SchemaField("collection", "STRING", mode="NULLABLE"),
     bigquery.SchemaField("product_id", "STRING", mode="NULLABLE"),
     # Nullable context fields
@@ -80,6 +80,12 @@ RAW_SCHEMA = [
             bigquery.SchemaField("option_id", "STRING", mode="NULLABLE"),
             bigquery.SchemaField("value_label", "STRING", mode="NULLABLE"),
             bigquery.SchemaField("value_id", "STRING", mode="NULLABLE"),
+            bigquery.SchemaField("quality", "STRING", mode="NULLABLE"),
+            bigquery.SchemaField("quality_label", "STRING", mode="NULLABLE"),
+            bigquery.SchemaField("alloy", "STRING", mode="NULLABLE"),
+            bigquery.SchemaField("diamond", "STRING", mode="NULLABLE"),
+            bigquery.SchemaField("shapediamond", "STRING", mode="NULLABLE"),
+            bigquery.SchemaField("product_id", "INTEGER", mode="NULLABLE"),
         ],
     ),
 ]

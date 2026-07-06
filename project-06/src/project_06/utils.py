@@ -30,7 +30,6 @@ def cleanup_local_file(file_path):
 
 def save_batch_csv(data, headers, file_name, batch_num, folder_name):
     file_path = f"{folder_name}/{file_name}_{batch_num}.csv"
-
     cleanup_local_file(file_path)
     logger.info(f"Existing file in {file_path} removed.")
     check_and_create_dir(file_path)
