@@ -107,8 +107,8 @@ def process_and_upload_batch(batch, batch_num, file_format, bucket, blob_prefix)
             df['recommendation_clicked_position'] = df['recommendation_clicked_position'].fillna(0)
             df['recommendation_clicked_position'] = df['recommendation_clicked_position'].astype(int)
 
-        # 1. Select all text/object columns that could contain a broken string 
-        string_cols = [col for col in df.select_dtypes(include=['object']).columns]
+        # 1. Select all text/object columns that could contain a broken string but option column 
+        string_cols = [col for col in df.select_dtypes(include=['object']).columns if col != 'option']  # Exclude 'option' column from this cleaning step
         # 2. Strip out carriage returns and newline characters from string values
         for col in string_cols:
             # Ensure we only process column values that are actually strings
@@ -116,7 +116,7 @@ def process_and_upload_batch(batch, batch_num, file_format, bucket, blob_prefix)
 
         # ensure "option" values are in []
         if 'option' in df.columns:
-            df['option'] = df['option'].astype(object).apply(lambda x: x if isinstance(x, list) else [x] if pd.notnull(x) else [])    
+            df['option'] = df['option'].apply(lambda x: x if isinstance(x, list) else [x] if pd.notnull(x) else [])    
 
         print(df.head())
         if file_format == "parquet":
