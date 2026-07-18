@@ -90,25 +90,13 @@ def process_and_upload_batch(batch, batch_num, file_format, bucket, blob_prefix)
             # Force column to string type to perform safe replacements
             df['price'] = df['price'].astype(str)
 
-            # Remove any spaces (including standard spaces and non-breaking spaces '\xa0')
-            df['price'] = df['price'].str.replace(r'[\s\xa0]+', '', regex=True)
-
-            # Replace the European decimal comma ',' with a standard dot '.'
-            df['price'] = df['price'].str.replace(',', '.', regex=False)
-
-            # Convert the cleaned string column to a true Float64 type
-            df['price'] = pd.to_numeric(df['price'], errors='coerce')
-
-            # Fill any empty/null prices with 0.0 or handle them based on business logic
-            df['price'] = df['price'].fillna(0.0)
-
         # Clean recommendation_clicked_position
         if 'recommendation_clicked_position' in df.columns:
             df['recommendation_clicked_position'] = df['recommendation_clicked_position'].fillna(0)
             df['recommendation_clicked_position'] = df['recommendation_clicked_position'].astype(int)
 
         # 1. Select all text/object columns that could contain a broken string but option column 
-        string_cols = [col for col in df.select_dtypes(include=['object']).columns if col != 'option']  # Exclude 'option' column from this cleaning step
+        string_cols = [col for col in df.select_dtypes(include=['object']).columns if col != 'option' and col != 'cart_products']  # Exclude 'option' and 'cart_products' columns from this cleaning step
         # 2. Strip out carriage returns and newline characters from string values
         for col in string_cols:
             # Ensure we only process column values that are actually strings
@@ -118,7 +106,11 @@ def process_and_upload_batch(batch, batch_num, file_format, bucket, blob_prefix)
         if 'option' in df.columns:
             df['option'] = df['option'].apply(lambda x: x if isinstance(x, list) else [x] if pd.notnull(x) else [])    
 
-        print(df.head())
+        # ensure "cart_products" values are in []
+        if 'cart_products' in df.columns:
+            df['cart_products'] = df['cart_products'].apply(lambda x: x if isinstance(x, list) else [x] if pd.notnull(x) else [])
+
+        #print(df.head())
         if file_format == "parquet":
             df.to_parquet(local_filename, index=False)
         elif file_format == "jsonl":

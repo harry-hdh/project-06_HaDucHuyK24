@@ -62,7 +62,7 @@ RAW_SCHEMA = [
     bigquery.SchemaField("cat_id", "STRING", mode="NULLABLE"),
     bigquery.SchemaField("collect_id", "STRING", mode="NULLABLE"),
     bigquery.SchemaField("viewing_product_id", "STRING", mode="NULLABLE"),
-    bigquery.SchemaField("price", "FLOAT", mode="NULLABLE"),
+    bigquery.SchemaField("price", "STRING", mode="NULLABLE"),
     bigquery.SchemaField("currency", "STRING", mode="NULLABLE"),
     bigquery.SchemaField("is_paypal", "BOOLEAN", mode="NULLABLE"),
     bigquery.SchemaField("recommendation_product_id", "STRING", mode="NULLABLE"),
@@ -85,9 +85,21 @@ RAW_SCHEMA = [
             bigquery.SchemaField("alloy", "STRING", mode="NULLABLE"),
             bigquery.SchemaField("diamond", "STRING", mode="NULLABLE"),
             bigquery.SchemaField("shapediamond", "STRING", mode="NULLABLE"),
-            bigquery.SchemaField("product_id", "INTEGER", mode="NULLABLE"),
-        ],
+            bigquery.SchemaField("product_id", "INTEGER", mode="NULLABLE")
+        ]
     ),
+
+    bigquery.SchemaField(
+        "cart_products",
+        "RECORD",
+        mode="REPEATED",
+        fields=[
+            bigquery.SchemaField("product_id", "INTEGER", mode="NULLABLE"),
+            bigquery.SchemaField("amount", "INTEGER", mode="NULLABLE"),
+            bigquery.SchemaField("price", "FLOAT", mode="NULLABLE"),
+            bigquery.SchemaField("currency", "STRING", mode="NULLABLE")
+        ]
+    )
 ]
 
 
