@@ -49,11 +49,11 @@ RAW_SCHEMA = [
     bigquery.SchemaField("api_version", "STRING", mode="NULLABLE"),
     bigquery.SchemaField("store_id", "STRING", mode="NULLABLE"),
     bigquery.SchemaField("local_time", "STRING", mode="NULLABLE"),
-    bigquery.SchemaField("show_recommendation", "BOOLEAN", mode="NULLABLE"),
+    bigquery.SchemaField("show_recommendation", "STRING", mode="NULLABLE"),
     bigquery.SchemaField("current_url", "STRING", mode="NULLABLE"),
     bigquery.SchemaField("referrer_url", "STRING", mode="NULLABLE"),
     bigquery.SchemaField("email_address", "STRING", mode="NULLABLE"),
-    bigquery.SchemaField("recommendation", "BOOLEAN", mode="NULLABLE"),
+    bigquery.SchemaField("recommendation", "STRING", mode="NULLABLE"),
     bigquery.SchemaField("utm_source", "STRING", mode="NULLABLE"),
     bigquery.SchemaField("utm_medium", "STRING", mode="NULLABLE"),
     bigquery.SchemaField("collection", "STRING", mode="NULLABLE"),
@@ -96,7 +96,7 @@ RAW_SCHEMA = [
         fields=[
             bigquery.SchemaField("product_id", "INTEGER", mode="NULLABLE"),
             bigquery.SchemaField("amount", "INTEGER", mode="NULLABLE"),
-            bigquery.SchemaField("price", "FLOAT", mode="NULLABLE"),
+            bigquery.SchemaField("price", "STRING", mode="NULLABLE"),
             bigquery.SchemaField("currency", "STRING", mode="NULLABLE")
         ]
     )
